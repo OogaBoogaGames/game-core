@@ -1,0 +1,19 @@
+{
+  "name": "@oogaboogagames/game-core",
+  "version": "0.2.3",
+  "description": "Base game definitions for OogaBoogaGames",
+  "main": "./dist/GameBase.js",
+  "scripts": {
+    "build": "tsc && bun run extify.ts"
+  },
+  "author": "Endercass",
+  "license": "LGPL-3.0-or-later",
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "bun": "^1.0.11",
+    "bun-types": "^1.0.11"
+  },
+  "peerDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
