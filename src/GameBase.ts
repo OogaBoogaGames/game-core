@@ -1,3 +1,4 @@
+import { ErrorStage } from "./ErrorStage";
 import { Player } from "./Player";
 
 export class GameState<T> {
@@ -42,19 +43,46 @@ export abstract class Game {
   abstract stages: GameStage[];
 
   players: Player[];
+  gameId: string;
 
   gamestate: GameState<any>;
 
   constructor() {
+    this.gameId = "<uninitialized>";
     this.players = [];
     this.gamestate = new GameState<any>(null);
   }
 
-  addPlayer(player: Player) {
+  gotoStage(stage: number, recoverErrors: boolean = false) {
+    try {
+      this.stages[stage].onstart(this);
+    } catch (e) {
+      let nextStage: number | "unrecoverable" = recoverErrors
+        ? stage + 1
+        : "unrecoverable";
+      let errorStage: ErrorStage;
+      if (e instanceof Error) {
+        errorStage = new ErrorStage(this, [nextStage, e]);
+      } else {
+        errorStage = new ErrorStage(this, [
+          nextStage,
+          new Error(JSON.stringify(e)),
+        ]);
+      }
+      errorStage.onstart(this);
+    }
+  }
+
+  addPlayer(id: string, name: string): Player {
+    return new Player(id, name, this);
+  }
+
+  addPlayerRaw(player: Player) {
     this.players.push(player);
   }
 
-  start(): void {
+  start(gameId: string): void {
+    this.gameId = gameId;
     this.stages[0].onstart(this);
   }
 
