@@ -1,6 +1,6 @@
 {
   "name": "@oogaboogagames/game-core",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Base game definitions for OogaBoogaGames",
   "main": "./dist/GameBase.js",
   "scripts": {
