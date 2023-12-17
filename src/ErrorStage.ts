@@ -34,3 +34,27 @@ export class ErrorStage extends GameStage {
     this.responses = new Map();
   }
 }
+
+export function gotoStageSafe(
+  game: Game,
+  stage: number,
+  recoverErrors: boolean = false
+) {
+  try {
+    game.stages[stage].onstart(game);
+  } catch (e) {
+    let nextStage: number | "unrecoverable" = recoverErrors
+      ? stage + 1
+      : "unrecoverable";
+    let errorStage: ErrorStage;
+    if (e instanceof Error) {
+      errorStage = new ErrorStage(game, [nextStage, e]);
+    } else {
+      errorStage = new ErrorStage(game, [
+        nextStage,
+        new Error(JSON.stringify(e)),
+      ]);
+    }
+    errorStage.onstart(game);
+  }
+}
