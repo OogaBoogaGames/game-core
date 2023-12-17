@@ -5,7 +5,7 @@ export function obg_main<T extends { new (...args: any[]): Game }>(
   constructor: T
 ) {
   // @ts-ignore
-  globalThis.target = constructor;
+  globalThis.target = new constructor();
 
   return constructor;
 }
